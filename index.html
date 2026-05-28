@@ -5,30 +5,33 @@
 <title>Sourdough App</title>
 
 <style>
-body { font-family: -apple-system; padding: 16px; background:#f5f5f5; }
-.card { background:white; padding:14px; border-radius:12px; margin-bottom:12px; }
-h1 { margin-bottom:8px; }
-.step { margin:10px 0; padding:10px; border-radius:10px; background:#fafafa; }
-.done { text-decoration: line-through; color: gray; }
-.time { font-weight: bold; }
-small { color:#666; display:block; margin-top:4px; }
-button { width:100%; padding:10px; border:none; border-radius:8px; background:black; color:white; margin-top:10px;}
-input { width:100%; padding:8px; margin-top:4px; }
+body { font-family:-apple-system; padding:16px; background:#f5f5f5;}
+.card { background:white; padding:14px; border-radius:12px; margin-bottom:12px;}
+.step { padding:12px; margin:10px 0; border-radius:10px; background:#fafafa;}
+.done { text-decoration:line-through; color:gray;}
+.time { font-weight:bold; }
+small { display:block; color:#666; margin-top:6px; white-space:pre-line;}
 </style>
 </head>
 
 <body>
 
-<h1>🍞 Sourdough</h1>
+<h2>🍞 Sourdough</h2>
 
 <div class="card">
 <label>Loaves</label>
-<input type="number" id="loaves" value="1" min="1">
+<input type="number" id="loaves" value="1">
 
-<label>Start Time (Mix)</label>
+<label>Start Time</label>
 <input type="time" id="startTime" value="08:00">
 
-<button onclick="generate()">Start Bake</button>
+<label>Proof Type</label>
+<select id="proofType">
+  <option value="cold">Cold Proof</option>
+  <option value="warm">Warm Proof</option>
+</select>
+
+<button onclick="startBake()">Start Bake</button>
 </div>
 
 <div class="card" id="ingredients"></div>
@@ -36,114 +39,194 @@ input { width:100%; padding:8px; margin-top:4px; }
 
 <script>
 
-// base ingredients (1 loaf)
+// INGREDIENTS
 const base = {
-  starter: 125,
-  water: 330,
-  salt: 12,
-  breadFlour: 465,
-  wholeWheat: 50
+  starter:125, water:330, salt:12, bread:465, wheat:50
 };
 
-// full workflow (offsets in minutes from MIX time)
-const steps = [
+// STEPS (VERBOSE)
+function getSteps(proofType){
+  let steps = [
 
-{ name:"Feed Starter (1:4:4)", offset:-600,
-  note:"Night before (~10PM). Goal: ready 8–9AM" },
+{ name:"Feed Starter",
+  offset:-600,
+  text:`Night Before (10 PM)
+Feed your starter 1:4:4
+Goal: ready to use around 8–9 AM` },
 
-{ name:"Mix Flour + 95% Water", offset:0,
-  note:"Mix by hand" },
+{ name:"Mix & Autolyse",
+  offset:0,
+  text:`Add all flour and mix by hand
+Add 95% of water
+Wait 1 hr` },
 
-{ name:"Autolyse", offset:0,
-  note:"Wait 1 hour" },
+{ name:"Add Starter",
+  offset:60,
+  text:`Add starter
+Slap and fold 2 min
+Wait 20 min` },
 
-{ name:"Add Starter", offset:60,
-  note:"Slap & fold 2 min" },
+{ name:"Add Salt",
+  offset:80,
+  text:`Put salt in remaining water
+Slap and fold
+Wait 15 min` },
 
-{ name:"Rest", offset:80,
-  note:"Wait 20 min" },
+{ name:"Stretch & Fold 1",
+  offset:95,
+  text:`Wet hand
+Stretch and fold 4–6 times
+Wait 30 min` },
 
-{ name:"Add Salt + Remaining Water", offset:100,
-  note:"Slap & fold" },
+{ name:"Stretch & Fold 2",
+  offset:125,
+  text:`Repeat
+Wait 30 min` },
 
-{ name:"Rest", offset:115,
-  note:"Wait 15 min" },
+{ name:"Coil Fold 1",
+  offset:155,
+  text:`Lift from middle
+Let ends fold under
+Wait 30 min` },
 
-// folds
-{ name:"Stretch & Fold 1", offset:130,
-  note:"4–6 folds" },
+{ name:"Coil Fold 2",
+  offset:185,
+  text:`Repeat
+Gently shape ball
+Wait 30 min` },
 
-{ name:"Stretch & Fold 2", offset:160,
-  note:"Wait 30m then repeat" },
+{ name:"Bulk Fermentation",
+  offset:215,
+  text:`3–4 hours
+Look for:
+• 50–75% rise
+• Bubbles
+• Jiggle
 
-{ name:"Coil Fold 1", offset:190,
-  note:"Lift + fold under" },
+Adjust based on dough, not time` },
 
-{ name:"Coil Fold 2 + Shape Ball", offset:220,
-  note:"Gentle tension" },
+{ name:"Shape",
+  offset:395,
+  text:`Light flour
+Letter fold
+Build tension ball` },
 
-// bulk rest
-{ name:"Bulk Fermentation", offset:250,
-  note:"3–4h. Look for rise, bubbles, jiggle" },
-
-// shaping
-{ name:"Shape Dough", offset:430,
-  note:"Letter fold + tension" },
-
-{ name:"Into Banneton", offset:440,
-  note:"Seam UP, rice flour" },
-
-{ name:"Cold Proof", offset:450,
-  note:"8–24h fridge" },
-
-{ name:"Bake", offset:1000,
-  note:"475 lid ON 30m, 450 lid OFF 10–15m" }
+{ name:"Into Banneton",
+  offset:405,
+  text:`Seam UP
+Rice flour
+Cover` }
 
 ];
 
-function generate() {
-  const loaves = parseFloat(document.getElementById("loaves").value);
-  const time = document.getElementById("startTime").value;
+// PROOF BRANCH
+if(proofType === "cold"){
+  steps.push(
+    { name:"Cold Proof",
+      offset:415,
+      text:`Fridge 8–24 hours
+Longer = more sour` },
 
-  // INGREDIENTS
+    { name:"Bake",
+      offset:900,
+      text:`Preheat 500°F 45–60 min
+475 lid ON 30 min
+450 lid OFF 10–15 min
+Cool 2 hours` }
+  );
+}
+
+if(proofType === "warm"){
+  steps.push(
+    { name:"Warm Proof",
+      offset:415,
+      text:`75–80°F → 1–1.5h
+70–74°F → 1.5–2.5h
+<70°F → 2–3h
+
+Look for slight puff, not doubled` },
+
+    { name:"Bake",
+      offset:550,
+      text:`Preheat 500°F 45–60 min
+475 lid ON 30 min
+450 lid OFF 10–15 min
+Cool 2 hours` }
+  );
+}
+
+return steps;
+}
+
+let baseStart;
+let stepTimes = [];
+
+// START
+function startBake(){
+  const loaves = document.getElementById("loaves").value;
+  const proof = document.getElementById("proofType").value;
+  const [h,m] = document.getElementById("startTime").value.split(":");
+
+  baseStart = new Date();
+  baseStart.setHours(h);
+  baseStart.setMinutes(m);
+
+  renderIngredients(loaves);
+  renderSteps(proof);
+}
+
+// INGREDIENTS
+function renderIngredients(loaves){
   document.getElementById("ingredients").innerHTML = `
-    <h3>Ingredients</h3>
-    Starter: ${base.starter * loaves}g<br>
-    Water: ${base.water * loaves}g<br>
-    Salt: ${base.salt * loaves}g<br>
-    Bread Flour: ${base.breadFlour * loaves}g<br>
-    Whole Wheat: ${base.wholeWheat * loaves}g
-  `;
+  <b>Ingredients</b><br>
+  Starter: ${base.starter*loaves}g<br>
+  Water: ${base.water*loaves}g<br>
+  Salt: ${base.salt*loaves}g<br>
+  Bread Flour: ${base.bread*loaves}g<br>
+  Whole Wheat: ${base.wheat*loaves}g`;
+}
 
-  // TIME SETUP
-  const [h, m] = time.split(":").map(Number);
-  const start = new Date();
-  start.setHours(h);
-  start.setMinutes(m);
+// RENDER STEPS
+function renderSteps(proof){
+  const steps = getSteps(proof);
+  stepTimes = [];
 
-  let html = "<h3>Timeline</h3>";
+  let html = "<b>Timeline</b>";
 
-  steps.forEach((step, i) => {
-    const t = new Date(start.getTime() + step.offset * 60000);
-    const label = t.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  steps.forEach((s,i)=>{
+    const t = new Date(baseStart.getTime() + s.offset*60000);
+    stepTimes[i] = t;
 
     html += `
-      <div class="step">
-        <div>
-          <input type="checkbox" onchange="toggle(${i})">
-          <span id="s${i}">${step.name}</span>
-        </div>
-        <div class="time">${label}</div>
-        <small>${step.note}</small>
+    <div class="step">
+      <input type="checkbox" onchange="completeStep(${i})">
+      <span id="name${i}">${s.name}</span>
+      <div class="time" id="time${i}">
+        ${format(t)}
       </div>
-    `;
+      <small>${s.text}</small>
+    </div>`;
   });
 
   document.getElementById("timeline").innerHTML = html;
 }
 
-function toggle(i){
-  document.getElementById("s"+i).classList.toggle("done");
+// COMPLETE STEP → SHIFT FUTURE
+function completeStep(i){
+  document.getElementById("name"+i).classList.toggle("done");
+
+  const now = new Date();
+  const delta = now - stepTimes[i];
+
+  for(let j=i+1;j<stepTimes.length;j++){
+    stepTimes[j] = new Date(stepTimes[j].getTime() + delta);
+    document.getElementById("time"+j).innerText = format(stepTimes[j]);
+  }
+}
+
+// FORMAT TIME
+function format(d){
+  return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
 </script>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sourdough App</title>
+
+<style>
+body { font-family: -apple-system; padding: 16px; background:#f5f5f5; }
+.card { background:white; padding:14px; border-radius:12px; margin-bottom:12px; }
+h1 { margin-bottom:8px; }
+.step { margin:10px 0; padding:10px; border-radius:10px; background:#fafafa; }
+.done { text-decoration: line-through; color: gray; }
+.time { font-weight: bold; }
+small { color:#666; display:block; margin-top:4px; }
+button { width:100%; padding:10px; border:none; border-radius:8px; background:black; color:white; margin-top:10px;}
+input { width:100%; padding:8px; margin-top:4px; }
+</style>
+</head>
+
+<body>
+
+<h1>🍞 Sourdough</h1>
+
+<div class="card">
+<label>Loaves</label>
+<input type="number" id="loaves" value="1" min="1">
+
+<label>Start Time (Mix)</label>
+<input type="time" id="startTime" value="08:00">
+
+<button onclick="generate()">Start Bake</button>
+</div>
+
+<div class="card" id="ingredients"></div>
+<div class="card" id="timeline"></div>
+
+<script>
+
+// base ingredients (1 loaf)
+const base = {
+  starter: 125,
+  water: 330,
+  salt: 12,
+  breadFlour: 465,
+  wholeWheat: 50
+};
+
+// full workflow (offsets in minutes from MIX time)
+const steps = [
+
+{ name:"Feed Starter (1:4:4)", offset:-600,
+  note:"Night before (~10PM). Goal: ready 8–9AM" },
+
+{ name:"Mix Flour + 95% Water", offset:0,
+  note:"Mix by hand" },
+
+{ name:"Autolyse", offset:0,
+  note:"Wait 1 hour" },
+
+{ name:"Add Starter", offset:60,
+  note:"Slap & fold 2 min" },
+
+{ name:"Rest", offset:80,
+  note:"Wait 20 min" },
+
+{ name:"Add Salt + Remaining Water", offset:100,
+  note:"Slap & fold" },
+
+{ name:"Rest", offset:115,
+  note:"Wait 15 min" },
+
+// folds
+{ name:"Stretch & Fold 1", offset:130,
+  note:"4–6 folds" },
+
+{ name:"Stretch & Fold 2", offset:160,
+  note:"Wait 30m then repeat" },
+
+{ name:"Coil Fold 1", offset:190,
+  note:"Lift + fold under" },
+
+{ name:"Coil Fold 2 + Shape Ball", offset:220,
+  note:"Gentle tension" },
+
+// bulk rest
+{ name:"Bulk Fermentation", offset:250,
+  note:"3–4h. Look for rise, bubbles, jiggle" },
+
+// shaping
+{ name:"Shape Dough", offset:430,
+  note:"Letter fold + tension" },
+
+{ name:"Into Banneton", offset:440,
+  note:"Seam UP, rice flour" },
+
+{ name:"Cold Proof", offset:450,
+  note:"8–24h fridge" },
+
+{ name:"Bake", offset:1000,
+  note:"475 lid ON 30m, 450 lid OFF 10–15m" }
+
+];
+
+function generate() {
+  const loaves = parseFloat(document.getElementById("loaves").value);
+  const time = document.getElementById("startTime").value;
+
+  // INGREDIENTS
+  document.getElementById("ingredients").innerHTML = `
+    <h3>Ingredients</h3>
+    Starter: ${base.starter * loaves}g<br>
+    Water: ${base.water * loaves}g<br>
+    Salt: ${base.salt * loaves}g<br>
+    Bread Flour: ${base.breadFlour * loaves}g<br>
+    Whole Wheat: ${base.wholeWheat * loaves}g
+  `;
+
+  // TIME SETUP
+  const [h, m] = time.split(":").map(Number);
+  const start = new Date();
+  start.setHours(h);
+  start.setMinutes(m);
+
+  let html = "<h3>Timeline</h3>";
+
+  steps.forEach((step, i) => {
+    const t = new Date(start.getTime() + step.offset * 60000);
+    const label = t.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+    html += `
+      <div class="step">
+        <div>
+          <input type="checkbox" onchange="toggle(${i})">
+          <span id="s${i}">${step.name}</span>
+        </div>
+        <div class="time">${label}</div>
+        <small>${step.note}</small>
+      </div>
+    `;
+  });
+
+  document.getElementById("timeline").innerHTML = html;
+}
+
+function toggle(i){
+  document.getElementById("s"+i).classList.toggle("done");
+}
+
+</script>
+
+</body>
+</html>

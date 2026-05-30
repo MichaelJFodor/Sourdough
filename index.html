@@ -7,14 +7,14 @@
 .field-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:13px;color:var(--color-text-secondary)}
-.stepper{display:flex;align-items:center;gap:0;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);overflow:hidden;height:36px}
-.step-btn{width:44px;height:36px;border:none;background:var(--color-background-secondary);color:var(--color-text-primary);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.step-btn:active{background:var(--color-border-tertiary)}
-.step-val{flex:1;text-align:center;font-size:15px;font-weight:500;color:var(--color-text-primary)}
-.proof-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.proof-btn{padding:9px 0;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);font-size:14px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-primary);text-align:center;transition:all .15s}
+.stepper{display:flex;align-items:center;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);overflow:hidden;height:40px}
+.step-btn{width:48px;height:40px;border:none;background:var(--color-background-secondary);color:var(--color-text-primary);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-appearance:none;appearance:none;padding:0;touch-action:manipulation}
+.step-btn:active{background:var(--color-border-secondary)}
+.step-val{flex:1;text-align:center;font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.proof-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:5px}
+.proof-btn{padding:11px 0;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);font-size:14px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-primary);text-align:center;-webkit-appearance:none;appearance:none;touch-action:manipulation;width:100%}
 .proof-btn.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
-.go-btn{width:100%;padding:13px;border-radius:var(--border-radius-md);border:none;background:var(--color-text-primary);color:var(--color-background-primary);font-size:15px;font-weight:500;cursor:pointer;margin-top:10px}
+.go-btn{width:100%;padding:14px;border-radius:var(--border-radius-md);border:none;background:var(--color-text-primary);color:var(--color-background-primary);font-size:15px;font-weight:500;cursor:pointer;margin-top:10px;-webkit-appearance:none;appearance:none;touch-action:manipulation}
 .go-btn:active{opacity:.8}
 .ingr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .ingr-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem}
@@ -25,11 +25,11 @@
 .prog-bar{height:3px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;background:var(--color-text-primary);border-radius:2px;transition:width .3s}
 .tl-item{display:flex;gap:12px;position:relative}
-.tl-left{display:flex;flex-direction:column;align-items:center;width:40px;flex-shrink:0}
-.tl-dot{width:40px;height:40px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.tl-dot:active{transform:scale(.92)}
+.tl-left{display:flex;flex-direction:column;align-items:center;width:44px;flex-shrink:0}
+.tl-dot{width:44px;height:44px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .15s,border-color .15s;-webkit-appearance:none;appearance:none;padding:0;touch-action:manipulation}
+.tl-dot:active{background:var(--color-background-secondary)}
 .tl-dot.done{background:var(--color-text-primary);border-color:var(--color-text-primary)}
-.tl-dot i{font-size:17px;color:var(--color-text-secondary)}
+.tl-dot i{font-size:18px;color:var(--color-text-secondary);pointer-events:none}
 .tl-dot.done i{color:var(--color-background-primary)}
 .tl-line{flex:1;width:1.5px;background:var(--color-border-tertiary);min-height:10px}
 .tl-content{flex:1;padding-bottom:1.25rem;min-width:0}
@@ -47,70 +47,69 @@
 .empty i{font-size:36px;display:block;margin-bottom:.6rem;color:var(--color-border-secondary)}
 </style>
 
-<h2 class="sr-only">Sourdough bake planner — configure loaves, start time, and proof type to generate a tappable step-by-step timeline</h2>
+<h2 class="sr-only">Sourdough bake planner — configure loaves, start time, and proof type to generate a step-by-step timeline</h2>
 
 <div class="pg">
-
 <div class="card">
   <div class="sec-label">Setup</div>
   <div class="field-row">
     <div class="field">
       <label>Loaves</label>
       <div class="stepper">
-        <div class="step-btn" onclick="adj(-1)" role="button" aria-label="remove loaf"><i class="ti ti-minus" style="font-size:15px"></i></div>
+        <button class="step-btn" onclick="adj(-1)" aria-label="remove loaf" type="button"><i class="ti ti-minus" style="font-size:15px;pointer-events:none"></i></button>
         <span class="step-val" id="lv">1</span>
-        <div class="step-btn" onclick="adj(1)" role="button" aria-label="add loaf"><i class="ti ti-plus" style="font-size:15px"></i></div>
+        <button class="step-btn" onclick="adj(1)" aria-label="add loaf" type="button"><i class="ti ti-plus" style="font-size:15px;pointer-events:none"></i></button>
       </div>
     </div>
     <div class="field">
       <label>Start time</label>
-      <input type="time" id="st" value="08:00" style="height:36px;width:100%">
+      <input type="time" id="st" value="08:00" style="height:40px;width:100%">
     </div>
   </div>
-  <div class="field" style="margin-bottom:0">
+  <div class="field">
     <label>Proof type</label>
-    <div class="proof-row" style="margin-top:5px">
-      <div class="proof-btn active" id="pc" onclick="sp('cold')"><i class="ti ti-snowflake" aria-hidden="true"></i> Cold</div>
-      <div class="proof-btn" id="pw" onclick="sp('warm')"><i class="ti ti-sun" aria-hidden="true"></i> Warm</div>
+    <div class="proof-row">
+      <button class="proof-btn active" id="pc" onclick="sp('cold')" type="button"><i class="ti ti-snowflake" aria-hidden="true" style="pointer-events:none"></i> Cold</button>
+      <button class="proof-btn" id="pw" onclick="sp('warm')" type="button"><i class="ti ti-sun" aria-hidden="true" style="pointer-events:none"></i> Warm</button>
     </div>
   </div>
-  <button class="go-btn" onclick="go()">Plan my bake</button>
+  <button class="go-btn" onclick="go()" type="button">Plan my bake</button>
 </div>
 
 <div id="out" style="display:none">
-
-<div class="card">
-  <div class="sec-label">Ingredients</div>
-  <div class="ingr-grid" id="ig"></div>
-</div>
-
-<div class="card">
-  <div class="prog-wrap">
-    <div class="prog-row">
-      <span class="sec-label" style="margin:0">Timeline</span>
-      <span id="pl" style="font-size:12px;color:var(--color-text-secondary)"></span>
-    </div>
-    <div class="prog-bar"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+  <div class="card">
+    <div class="sec-label">Ingredients</div>
+    <div class="ingr-grid" id="ig"></div>
   </div>
-  <div id="tl"></div>
-</div>
-
+  <div class="card">
+    <div class="prog-wrap">
+      <div class="prog-row">
+        <span class="sec-label" style="margin:0">Timeline</span>
+        <span id="pl" style="font-size:12px;color:var(--color-text-secondary)"></span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+    </div>
+    <div id="tl"></div>
+  </div>
 </div>
 
 <div id="empty" class="empty">
   <i class="ti ti-bread" aria-hidden="true"></i>
   Configure your bake above,<br>then tap "Plan my bake"
 </div>
-
 </div>
 
 <script>
-let loaves=1, proof='cold', times=[], done=[];
-
+let loaves=1,proof='cold',times=[],done=[];
 const B={starter:125,water:330,salt:12,bread:465,wheat:50};
 
 function adj(d){loaves=Math.max(1,Math.min(8,loaves+d));document.getElementById('lv').textContent=loaves}
-function sp(t){proof=t;document.getElementById('pc').classList.toggle('active',t==='cold');document.getElementById('pw').classList.toggle('active',t==='warm')}
+
+function sp(t){
+  proof=t;
+  document.getElementById('pc').classList.toggle('active',t==='cold');
+  document.getElementById('pw').classList.toggle('active',t==='warm');
+}
 
 function steps(p){
   const s=[
@@ -166,9 +165,9 @@ function renderTl(ss){
     const isNow=!done[i]&&times[i]<=now&&(i===ss.length-1||!done[i+1]);
     return `<div class="tl-item" id="ti${i}">
       <div class="tl-left">
-        <div class="tl-dot${done[i]?' done':''}" onclick="tog(${i})" role="button" aria-label="mark step ${done[i]?'incomplete':'complete'}">
+        <button class="tl-dot${done[i]?' done':''}" onclick="tog(${i})" type="button" aria-label="mark step ${done[i]?'incomplete':'complete'}">
           <i class="ti ${done[i]?'ti-check':s.ic}" aria-hidden="true"></i>
-        </div>
+        </button>
         <div class="tl-line"></div>
       </div>
       <div class="tl-content">

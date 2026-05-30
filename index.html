@@ -1,252 +1,208 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans)}
-.pg{padding:1.25rem 0}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
-.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem}
-.field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:120px}
-label{font-size:13px;color:var(--color-text-secondary)}
-.pill-group{display:flex;gap:6px}
-.pill{padding:6px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);font-size:13px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-primary);transition:all .15s}
-.pill.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
-.start-btn{padding:8px 20px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-text-primary);color:var(--color-background-primary);font-size:14px;cursor:pointer;font-weight:500;white-space:nowrap;align-self:flex-end}
-.start-btn:hover{opacity:.85}
-.ingr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px}
-.ingr-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem;text-align:center}
-.ingr-amt{font-size:18px;font-weight:500}
+.pg{padding:1rem 0 2rem}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem}
+.sec-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem}
+.field-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:13px;color:var(--color-text-secondary)}
+.stepper{display:flex;align-items:center;gap:0;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);overflow:hidden;height:36px}
+.step-btn{width:44px;height:36px;border:none;background:var(--color-background-secondary);color:var(--color-text-primary);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-btn:active{background:var(--color-border-tertiary)}
+.step-val{flex:1;text-align:center;font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.proof-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.proof-btn{padding:9px 0;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);font-size:14px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-primary);text-align:center;transition:all .15s}
+.proof-btn.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.go-btn{width:100%;padding:13px;border-radius:var(--border-radius-md);border:none;background:var(--color-text-primary);color:var(--color-background-primary);font-size:15px;font-weight:500;cursor:pointer;margin-top:10px}
+.go-btn:active{opacity:.8}
+.ingr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ingr-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem}
+.ingr-amt{font-size:20px;font-weight:500;color:var(--color-text-primary)}
 .ingr-lbl{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
-.timeline{position:relative}
-.tl-item{display:flex;gap:12px;margin-bottom:0;position:relative}
-.tl-left{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
-.tl-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--color-border-secondary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s;z-index:1}
+.prog-wrap{margin-bottom:1rem}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.prog-bar{height:3px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--color-text-primary);border-radius:2px;transition:width .3s}
+.tl-item{display:flex;gap:12px;position:relative}
+.tl-left{display:flex;flex-direction:column;align-items:center;width:40px;flex-shrink:0}
+.tl-dot{width:40px;height:40px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.tl-dot:active{transform:scale(.92)}
 .tl-dot.done{background:var(--color-text-primary);border-color:var(--color-text-primary)}
-.tl-dot i{font-size:13px;color:var(--color-text-secondary)}
+.tl-dot i{font-size:17px;color:var(--color-text-secondary)}
 .tl-dot.done i{color:var(--color-background-primary)}
-.tl-line{flex:1;width:1.5px;background:var(--color-border-tertiary);min-height:12px}
-.tl-content{flex:1;padding-bottom:1.25rem}
-.tl-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
-.tl-name{font-size:14px;font-weight:500}
+.tl-line{flex:1;width:1.5px;background:var(--color-border-tertiary);min-height:10px}
+.tl-content{flex:1;padding-bottom:1.25rem;min-width:0}
+.tl-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;gap:8px}
+.tl-name{font-size:15px;font-weight:500;color:var(--color-text-primary);line-height:1.3}
 .tl-name.done{text-decoration:line-through;color:var(--color-text-secondary)}
-.tl-time{font-size:13px;color:var(--color-text-secondary);font-variant-numeric:tabular-nums}
-.tl-time.active{color:var(--color-text-primary);font-weight:500}
-.tl-body{font-size:13px;color:var(--color-text-secondary);line-height:1.6}
-.tl-body ul{padding-left:16px;margin-top:2px}
+.tl-time{font-size:13px;color:var(--color-text-secondary);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums}
+.tl-time.now{color:var(--color-text-primary);font-weight:500}
+.tl-body{font-size:13px;color:var(--color-text-secondary);line-height:1.65}
+.tl-body ul{padding-left:16px;margin-top:3px}
+.tl-body li{margin-bottom:1px}
 .tl-item:last-child .tl-line{display:none}
-.section-title{font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem}
-.progress-bar{height:4px;background:var(--color-border-tertiary);border-radius:2px;margin-bottom:1.25rem;overflow:hidden}
-.progress-fill{height:100%;background:var(--color-text-primary);border-radius:2px;transition:width .4s}
-.now-badge{display:inline-block;background:var(--color-background-warning);color:var(--color-text-warning);font-size:11px;padding:1px 7px;border-radius:10px;margin-left:6px;vertical-align:middle}
-.loaves-btn{width:28px;height:28px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--color-text-primary)}
-.loaves-val{font-size:16px;font-weight:500;min-width:20px;text-align:center}
-.loaves-row{display:flex;align-items:center;gap:8px}
-.empty{text-align:center;padding:2rem 0;color:var(--color-text-secondary);font-size:14px}
+.now-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--color-text-warning);margin-right:5px;vertical-align:2px}
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--color-text-secondary);font-size:14px;line-height:1.6}
+.empty i{font-size:36px;display:block;margin-bottom:.6rem;color:var(--color-border-secondary)}
 </style>
 
-<h2 class="sr-only">Sourdough bake planner — set your loaves, start time, and proof type to generate a step-by-step timeline</h2>
+<h2 class="sr-only">Sourdough bake planner — configure loaves, start time, and proof type to generate a tappable step-by-step timeline</h2>
 
 <div class="pg">
+
 <div class="card">
-  <div class="row">
+  <div class="sec-label">Setup</div>
+  <div class="field-row">
     <div class="field">
       <label>Loaves</label>
-      <div class="loaves-row">
-        <div class="loaves-btn" onclick="adjLoaves(-1)" aria-label="fewer loaves"><i class="ti ti-minus" style="font-size:14px"></i></div>
-        <span class="loaves-val" id="loavesVal">1</span>
-        <div class="loaves-btn" onclick="adjLoaves(1)" aria-label="more loaves"><i class="ti ti-plus" style="font-size:14px"></i></div>
+      <div class="stepper">
+        <div class="step-btn" onclick="adj(-1)" role="button" aria-label="remove loaf"><i class="ti ti-minus" style="font-size:15px"></i></div>
+        <span class="step-val" id="lv">1</span>
+        <div class="step-btn" onclick="adj(1)" role="button" aria-label="add loaf"><i class="ti ti-plus" style="font-size:15px"></i></div>
       </div>
     </div>
     <div class="field">
       <label>Start time</label>
-      <input type="time" id="startTime" value="08:00" style="width:100%">
+      <input type="time" id="st" value="08:00" style="height:36px;width:100%">
     </div>
-    <div class="field">
-      <label>Proof type</label>
-      <div class="pill-group">
-        <div class="pill active" id="pill-cold" onclick="setProof('cold')">Cold</div>
-        <div class="pill" id="pill-warm" onclick="setProof('warm')">Warm</div>
-      </div>
-    </div>
-    <button class="start-btn" onclick="startBake()"><i class="ti ti-player-play" aria-hidden="true"></i> Plan bake</button>
   </div>
+  <div class="field" style="margin-bottom:0">
+    <label>Proof type</label>
+    <div class="proof-row" style="margin-top:5px">
+      <div class="proof-btn active" id="pc" onclick="sp('cold')"><i class="ti ti-snowflake" aria-hidden="true"></i> Cold</div>
+      <div class="proof-btn" id="pw" onclick="sp('warm')"><i class="ti ti-sun" aria-hidden="true"></i> Warm</div>
+    </div>
+  </div>
+  <button class="go-btn" onclick="go()">Plan my bake</button>
 </div>
 
-<div id="ingrSection" style="display:none">
-<div class="card">
-  <div class="section-title">Ingredients</div>
-  <div class="ingr-grid" id="ingrGrid"></div>
-</div>
+<div id="out" style="display:none">
 
 <div class="card">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
-    <div class="section-title" style="margin:0">Timeline</div>
-    <span id="progressLabel" style="font-size:13px;color:var(--color-text-secondary)"></span>
-  </div>
-  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="timeline" id="timeline"></div>
-</div>
+  <div class="sec-label">Ingredients</div>
+  <div class="ingr-grid" id="ig"></div>
 </div>
 
-<div id="emptyState" class="empty">
-  <i class="ti ti-bread" style="font-size:32px;display:block;margin-bottom:.5rem" aria-hidden="true"></i>
-  Set your preferences above and tap "Plan bake" to get started
+<div class="card">
+  <div class="prog-wrap">
+    <div class="prog-row">
+      <span class="sec-label" style="margin:0">Timeline</span>
+      <span id="pl" style="font-size:12px;color:var(--color-text-secondary)"></span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+  </div>
+  <div id="tl"></div>
+</div>
+
+</div>
+
+<div id="empty" class="empty">
+  <i class="ti ti-bread" aria-hidden="true"></i>
+  Configure your bake above,<br>then tap "Plan my bake"
 </div>
 
 </div>
 
 <script>
-let loaves = 1;
-let proofType = 'cold';
-let stepTimes = [];
-let stepDone = [];
+let loaves=1, proof='cold', times=[], done=[];
 
-const base = {starter:125,water:330,salt:12,bread:465,wheat:50};
+const B={starter:125,water:330,salt:12,bread:465,wheat:50};
 
-function adjLoaves(d){
-  loaves = Math.max(1, Math.min(6, loaves + d));
-  document.getElementById('loavesVal').textContent = loaves;
-}
+function adj(d){loaves=Math.max(1,Math.min(8,loaves+d));document.getElementById('lv').textContent=loaves}
+function sp(t){proof=t;document.getElementById('pc').classList.toggle('active',t==='cold');document.getElementById('pw').classList.toggle('active',t==='warm')}
 
-function setProof(t){
-  proofType = t;
-  document.getElementById('pill-cold').classList.toggle('active', t==='cold');
-  document.getElementById('pill-warm').classList.toggle('active', t==='warm');
-}
-
-function getSteps(proof){
-  const steps = [
-    {name:'Feed starter', icon:'ti-droplet', offset:-600,
-     body:'<b>Night before (~10 PM)</b><br>Feed 1:4:4 ratio. Goal: starter peaks around 8–9 AM the next morning.'},
-    {name:'Autolyse', icon:'ti-droplets', offset:0,
-     body:'Mix all flour together. Add 95% of your water and mix until no dry flour remains. Rest 1 hour — gluten develops without kneading.'},
-    {name:'Add starter', icon:'ti-plus', offset:60,
-     body:'Add starter and slap-and-fold for 2 minutes until fully incorporated. Rest 20 min.'},
-    {name:'Add salt', icon:'ti-salt', offset:80,
-     body:'Dissolve salt in remaining 5% water. Incorporate into dough with another round of slap-and-fold. Rest 15 min.'},
-    {name:'Stretch & fold 1', icon:'ti-arrows-up-down', offset:95,
-     body:'With a wet hand, stretch the dough up and fold over itself, rotating 90° each time. 4–6 folds. Rest 30 min.'},
-    {name:'Stretch & fold 2', icon:'ti-arrows-up-down', offset:125,
-     body:'Repeat stretch & fold. Dough should feel stronger and more cohesive. Rest 30 min.'},
-    {name:'Coil fold 1', icon:'ti-rotate', offset:155,
-     body:'Lift dough from the center, let the ends fold under. Rotate and repeat. Rest 30 min.'},
-    {name:'Coil fold 2', icon:'ti-rotate', offset:185,
-     body:'Repeat coil fold. Gently shape into a smooth ball at the end. Rest 30 min.'},
-    {name:'Bulk fermentation', icon:'ti-clock', offset:215,
-     body:'Rest 3–4 hours. Watch for:<ul><li>50–75% volume increase</li><li>Bubbles on surface and sides</li><li>Dough jiggles like jello when shaken</li></ul>Adjust by feel — not just the clock.'},
-    {name:'Pre-shape', icon:'ti-shape', offset:395,
-     body:'Turn onto unfloured surface. Letter-fold, then roll into a tight ball. Rest uncovered 20–30 min to relax gluten.'},
-    {name:'Final shape & banneton', icon:'ti-basket', offset:415,
-     body:'Shape into final loaf with surface tension. Place <b>seam-side up</b> in banneton dusted with rice flour. Cover with plastic wrap or shower cap.'},
+function steps(p){
+  const s=[
+    {n:'Feed starter',ic:'ti-droplet',off:-600,b:'<b>Night before (~10 PM)</b> — feed 1:4:4 (starter:flour:water). Peaks ~8–9 AM.'},
+    {n:'Autolyse',ic:'ti-droplets',off:0,b:'Mix all flour. Add 95% of water, mix until no dry flour. Rest 1 hour — gluten develops on its own.'},
+    {n:'Add starter',ic:'ti-plus',off:60,b:'Add starter and slap-and-fold 2 min until fully combined. Rest 20 min.'},
+    {n:'Add salt',ic:'ti-dots',off:80,b:'Dissolve salt in remaining water. Incorporate with slap-and-fold. Rest 15 min.'},
+    {n:'Stretch & fold 1',ic:'ti-arrows-up-down',off:95,b:'Wet hand, stretch up and fold over, rotating 90° each time. 4–6 folds. Rest 30 min.'},
+    {n:'Stretch & fold 2',ic:'ti-arrows-up-down',off:125,b:'Repeat. Dough should feel noticeably stronger. Rest 30 min.'},
+    {n:'Coil fold 1',ic:'ti-rotate',off:155,b:'Lift dough from center, let ends fold under. Rotate and repeat. Rest 30 min.'},
+    {n:'Coil fold 2',ic:'ti-rotate',off:185,b:'Repeat coil fold, gently shape into ball. Rest 30 min.'},
+    {n:'Bulk fermentation',ic:'ti-clock',off:215,b:'Rest 3–4 hours. Look for:<ul><li>50–75% volume rise</li><li>Bubbles on surface and sides</li><li>Dough jiggles like jello</li></ul>Trust your dough over the clock.'},
+    {n:'Pre-shape',ic:'ti-shape',off:395,b:'Turn onto bare surface. Letter-fold then roll into a tight ball. Rest uncovered 20–30 min.'},
+    {n:'Final shape & banneton',ic:'ti-basket',off:415,b:'Shape with surface tension. Place <b>seam-side up</b> in rice-floured banneton. Cover tightly.'},
   ];
-
-  if(proof === 'cold'){
-    steps.push(
-      {name:'Cold proof', icon:'ti-snowflake', offset:425,
-       body:'Place covered banneton in fridge. Proof 8–24 hours. Longer = more sour and open crumb. No need to proof at room temp first.'},
-      {name:'Score & bake', icon:'ti-knife', offset:900,
-       body:'Preheat dutch oven at <b>500°F / 260°C for 45–60 min</b>. Score straight from the fridge — cold dough holds shape better.<br><br>Lower dough in on parchment:<ul><li>Lid on → 475°F for 30 min (steam)</li><li>Lid off → 450°F for 10–15 min (crust)</li></ul>Cool on rack for <b>at least 2 hours</b> before slicing.'}
+  if(p==='cold'){
+    s.push(
+      {n:'Cold proof',ic:'ti-snowflake',off:425,b:'Into the fridge. Proof 8–24 hrs — longer = more sour, more open crumb.'},
+      {n:'Score & bake',ic:'ti-knife',off:900,b:'Preheat dutch oven <b>500°F / 260°C for 45–60 min</b>. Score cold dough, lower in on parchment.<ul><li>Lid on → 475°F / 245°C — 30 min</li><li>Lid off → 450°F / 230°C — 10–15 min</li></ul>Cool on rack <b>2 hrs minimum</b> before slicing.'}
     );
   } else {
-    steps.push(
-      {name:'Warm proof', icon:'ti-temperature', offset:425,
-       body:'Proof at room temperature in banneton:<ul><li>75–80°F → 1–1.5 hrs</li><li>70–74°F → 1.5–2.5 hrs</li><li>Below 70°F → 2–3 hrs</li></ul>Look for slight puff, not doubled. Poke test: dent springs back slowly.'},
-      {name:'Score & bake', icon:'ti-knife', offset:560,
-       body:'Preheat dutch oven at <b>500°F / 260°C for 45–60 min</b>. Score before loading.<br><br>Lower dough in on parchment:<ul><li>Lid on → 475°F for 30 min (steam)</li><li>Lid off → 450°F for 10–15 min (crust)</li></ul>Cool on rack for <b>at least 2 hours</b> before slicing.'}
+    s.push(
+      {n:'Warm proof',ic:'ti-temperature',off:425,b:'Proof in banneton at room temp:<ul><li>75–80°F → 1–1.5 hrs</li><li>70–74°F → 1.5–2.5 hrs</li><li>Below 70°F → 2–3 hrs</li></ul>Poke test: dent springs back slowly.'},
+      {n:'Score & bake',ic:'ti-knife',off:560,b:'Preheat dutch oven <b>500°F / 260°C for 45–60 min</b>. Score, lower in on parchment.<ul><li>Lid on → 475°F / 245°C — 30 min</li><li>Lid off → 450°F / 230°C — 10–15 min</li></ul>Cool on rack <b>2 hrs minimum</b> before slicing.'}
     );
   }
-  return steps;
+  return s;
 }
 
-function fmt(d){
-  return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+function fmt(d){return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
+
+function go(){
+  const [h,m]=document.getElementById('st').value.split(':');
+  const base=new Date();base.setHours(+h,+m,0,0);
+  const ss=steps(proof);
+  times=ss.map(s=>new Date(base.getTime()+s.off*60000));
+  done=ss.map(()=>false);
+  document.getElementById('empty').style.display='none';
+  document.getElementById('out').style.display='block';
+  renderIngr();
+  renderTl(ss);
+  updProg();
 }
 
-function startBake(){
-  const [h,m] = document.getElementById('startTime').value.split(':');
-  const base2 = new Date();
-  base2.setHours(+h, +m, 0, 0);
-
-  const steps = getSteps(proofType);
-  stepTimes = steps.map(s => new Date(base2.getTime() + s.offset*60000));
-  stepDone = steps.map(()=>false);
-
-  document.getElementById('emptyState').style.display = 'none';
-  document.getElementById('ingrSection').style.display = 'block';
-
-  renderIngredients();
-  renderTimeline(steps);
-  updateProgress();
+function renderIngr(){
+  const items=[['Bread flour',B.bread*loaves+'g'],['Whole wheat',B.wheat*loaves+'g'],['Water',B.water*loaves+'g'],['Starter',B.starter*loaves+'g'],['Salt',B.salt*loaves+'g']];
+  document.getElementById('ig').innerHTML=items.map(([l,v])=>`<div class="ingr-card"><div class="ingr-amt">${v}</div><div class="ingr-lbl">${l}</div></div>`).join('');
 }
 
-function renderIngredients(){
-  const items = [
-    ['Bread flour', base.bread * loaves + 'g'],
-    ['Whole wheat', base.wheat * loaves + 'g'],
-    ['Water', base.water * loaves + 'g'],
-    ['Starter', base.starter * loaves + 'g'],
-    ['Salt', base.salt * loaves + 'g'],
-  ];
-  document.getElementById('ingrGrid').innerHTML = items.map(([l,v]) =>
-    `<div class="ingr-card"><div class="ingr-amt">${v}</div><div class="ingr-lbl">${l}</div></div>`
-  ).join('');
-}
-
-function renderTimeline(steps){
-  const now = new Date();
-  let html = '';
-  steps.forEach((s,i) => {
-    const isNow = !stepDone[i] && (i === steps.length-1 || !stepDone[i+1]) && stepTimes[i] <= now;
-    const isPast = stepDone[i];
-    html += `
-    <div class="tl-item" id="item${i}">
+function renderTl(ss){
+  const now=new Date();
+  document.getElementById('tl').innerHTML=ss.map((s,i)=>{
+    const isNow=!done[i]&&times[i]<=now&&(i===ss.length-1||!done[i+1]);
+    return `<div class="tl-item" id="ti${i}">
       <div class="tl-left">
-        <div class="tl-dot${isPast?' done':''}" onclick="toggleStep(${i})" title="Mark ${isPast?'incomplete':'complete'}">
-          <i class="ti ${isPast ? 'ti-check' : s.icon}" aria-hidden="true"></i>
+        <div class="tl-dot${done[i]?' done':''}" onclick="tog(${i})" role="button" aria-label="mark step ${done[i]?'incomplete':'complete'}">
+          <i class="ti ${done[i]?'ti-check':s.ic}" aria-hidden="true"></i>
         </div>
         <div class="tl-line"></div>
       </div>
       <div class="tl-content">
-        <div class="tl-header">
-          <span class="tl-name${isPast?' done':''}" id="name${i}">${s.name}${isNow?'<span class="now-badge">now</span>':''}</span>
-          <span class="tl-time${isNow?' active':''}" id="time${i}">${fmt(stepTimes[i])}</span>
+        <div class="tl-head">
+          <span class="tl-name${done[i]?' done':''}" id="tn${i}">${isNow?'<span class="now-dot"></span>':''}${s.n}</span>
+          <span class="tl-time${isNow?' now':''}" id="tt${i}">${fmt(times[i])}</span>
         </div>
-        <div class="tl-body">${s.body}</div>
+        <div class="tl-body">${s.b}</div>
       </div>
     </div>`;
-  });
-  document.getElementById('timeline').innerHTML = html;
+  }).join('');
 }
 
-function toggleStep(i){
-  const steps = getSteps(proofType);
-  stepDone[i] = !stepDone[i];
-
-  if(stepDone[i]){
-    const now = new Date();
-    const delta = now - stepTimes[i];
-    for(let j=i+1;j<stepTimes.length;j++){
-      stepTimes[j] = new Date(stepTimes[j].getTime() + delta);
-      const el = document.getElementById('time'+j);
-      if(el) el.textContent = fmt(stepTimes[j]);
+function tog(i){
+  const ss=steps(proof);
+  done[i]=!done[i];
+  if(done[i]){
+    const delta=new Date()-times[i];
+    for(let j=i+1;j<times.length;j++){
+      times[j]=new Date(times[j].getTime()+delta);
+      const el=document.getElementById('tt'+j);
+      if(el)el.textContent=fmt(times[j]);
     }
   }
-
-  const dot = document.querySelector(`#item${i} .tl-dot`);
-  const icon = dot.querySelector('i');
-  const nameEl = document.getElementById('name'+i);
-
-  dot.classList.toggle('done', stepDone[i]);
-  icon.className = stepDone[i] ? 'ti ti-check' : 'ti '+steps[i].icon;
-  nameEl.className = 'tl-name' + (stepDone[i]?' done':'');
-
-  updateProgress();
+  const dot=document.querySelector(`#ti${i} .tl-dot`);
+  dot.querySelector('i').className='ti '+(done[i]?'ti-check':ss[i].ic);
+  dot.classList.toggle('done',done[i]);
+  document.getElementById('tn'+i).className='tl-name'+(done[i]?' done':'');
+  updProg();
 }
 
-function updateProgress(){
-  const done = stepDone.filter(Boolean).length;
-  const total = stepDone.length;
-  const pct = total ? Math.round(done/total*100) : 0;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = done + ' of ' + total + ' steps';
+function updProg(){
+  const n=done.filter(Boolean).length,t=done.length;
+  document.getElementById('pf').style.width=Math.round(n/t*100)+'%';
+  document.getElementById('pl').textContent=n+' of '+t+' steps done';
 }
 </script>

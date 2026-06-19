@@ -209,19 +209,19 @@ function getPhases(){
   return [
     { phase:'Starter', steps:[
       { id:'feed', icon:'ti-droplet', title:'Feed your starter',
-        body:'Night before, ~10 PM. Feed <b>1:4:4</b> (starter:flour:water). Ready around 8–9 AM — falling from its peak, not still rising.' }
+        body:'Night before, ~10 PM. Feed <b>1:4:4</b> (starter:flour:water) to be ready around 8–9 AM — . It should be falling from its peak, not still rising.' }
     ]},
     { phase:'Mix & autolyse', steps:[
       { id:'autolyse', icon:'ti-droplets', title:'Autolyse',
-        body:`In a large bowl, combine all Bread Flour and Wheat flour and mix by hand. Add ${fmtAmt(B.autolyseWater*mult)}g room-temp water (~76°F), saving ${fmtAmt(B.saltWater*mult)}g for later. Wet your hands to prevent sticking and mix until no dry flour remains; it'll look shaggy and cling to your hands. Cover, rest 1 hour.` },
+        body:`In a large bowl, combine all Bread Flour and Wheat Flour and mix by hand. Add ${fmtAmt(B.autolyseWater*mult)}g room-temp water (~76°F), saving ${fmtAmt(B.saltWater*mult)}g for later. Wet your hands to prevent sticking and mix until no dry flour remains; it'll look shaggy and cling to your hands. Cover, rest 1 hour.` },
       { id:'add-starter', icon:'ti-plus', title:'Add starter',
         body:`Add ${fmtAmt(B.starter*mult)}g starter. Slap-and-fold 2 min until combined. Cover, rest 20 min.` },
       { id:'add-salt', icon:'ti-dots', title:'Add salt',
-        body:`Poke the dough with 10 fingers, 3 times. Combine ${fmtAmt(B.salt*mult)}g salt with the ${fmtAmt(B.saltWater*mult)}g water saved earlier, mix in. Slap-and-fold 2 min. Rest 15 min — makes the dough easier to handle later.` }
+        body:`Poke the dough with 10 fingers, 3 times. Combine ${fmtAmt(B.salt*mult)}g salt with the ${fmtAmt(B.saltWater*mult)}g water saved earlier, mix in. Slap-and-fold 2 min. Cover, rest 15 min.` }
     ]},
     { phase:'Bulk — folds', steps:[
       { id:'sf1', icon:'ti-arrows-up-down', title:'Stretch & fold 1',
-        body:'Wet your hands, move dough to a lightly floured cutting board. Picture it as a square: stretch each side up without tearing and fold to the middle, then do the same to each corner — 8 folds total. Cover, rest 30 min.' },
+        body:'Move dough to a lightly floured cutting board and wet your hands. Picture the dough as a square: now stretch each side up as far as you can without tearing and fold to the middle, then do the same to each corner — 8 folds total. Cover, rest 30 min.' },
       { id:'sf2', icon:'ti-arrows-up-down', title:'Stretch & fold 2',
         body:'Repeat the same 8 folds. Cover, rest 30 min.' },
       { id:'coil1', icon:'ti-rotate', title:'Coil fold 1',
@@ -235,9 +235,9 @@ function getPhases(){
     ]},
     { phase:'Shape', steps:[
       { id:'preshape', icon:'ti-shape', title:'Pre-shape',
-        body:'Lightly flour the surface with rice flour. Gently turn the dough out. Letter-fold (top to middle, bottom to middle), then roll into a ball with tension. Gentle, not loose — too loose and the gas escapes.' },
+        body:'Lightly flour the cutting board and gently turn the dough out. Letter-fold (top to middle, bottom to middle), then roll into a ball with tension. Gentle, not loose — too loose and the gas escapes.' },
       { id:'banneton', icon:'ti-basket', title:'Into the banneton',
-        body:'Place dough <b>seam-side up</b> in a rice-floured banneton. Very lightly dust the top with rice flour so it won\'t stick to the cover. Cover with a towel, bag, or loose plastic wrap.' }
+        body:'Place dough <b>seam-side up</b> in a Rice-Floured banneton. Very lightly dust the top as well with Rice Flour so it won\'t stick to the cover. Cover with a towel, bag, or loose plastic wrap.' }
     ]},
     { phase:'Proof', steps:[ proofStep ] },
     { phase:'Bake', steps:[

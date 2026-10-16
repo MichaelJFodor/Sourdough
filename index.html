@@ -117,6 +117,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;c
 .step-body ul{padding-left:16px;margin-top:3px}
 .step-body li{margin-bottom:1px}
 
+/* notes */
+.notes-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:10px}
+.notes-item{font-size:13px;color:var(--color-text-secondary);line-height:1.65;padding-left:16px;position:relative}
+.notes-item::before{content:'';position:absolute;left:2px;top:8px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.notes-sub{margin-top:6px;padding-left:4px;list-style:none;counter-reset:nsub;display:flex;flex-direction:column;gap:3px}
+.notes-sub li{font-size:12.5px;color:var(--color-text-secondary);line-height:1.6;padding-left:20px;position:relative;counter-increment:nsub}
+.notes-sub li::before{content:counter(nsub) '.';position:absolute;left:0;color:var(--accent);font-weight:600;font-family:var(--slab);font-size:12px}
+.notes-after{font-size:12px;color:var(--color-text-secondary);margin-top:6px;padding-left:2px;font-style:italic}
+
 @media(prefers-reduced-motion:reduce){
   .tab-btn,.seg-btn,.step-dot,.prog-fill{transition:none}
 }
@@ -199,6 +208,33 @@ function fmtAmt(n){
 }
 // shorthand: grams with current multiplier
 function g(n){ return fmtAmt(n * mult) + 'g'; }
+
+const RECIPE_NOTES = {
+  pumpkin:`<ul class="notes-list">
+    <li class="notes-item">Need twine to wrap around the loaf — can do this right before baking</li>
+    <li class="notes-item">Soak twine in olive oil to prevent sticking</li>
+    <li class="notes-item">Use a stick of cinnamon to look like a stem</li>
+    <li class="notes-item">Use lamination technique for spreading, but leave the edges undone — otherwise it may not stick well for shaping</li>
+  </ul>`,
+  chocolate:`<ul class="notes-list">
+    <li class="notes-item">The more chips the better — it won't taste very chocolatey without them</li>
+    <li class="notes-item">Experiment with various amounts of espresso when blooming</li>
+    <li class="notes-item">Alternative mix order to consider:
+      <ol class="notes-sub">
+        <li>Mix cocoa powder, espresso, water</li>
+        <li>Add starter and brown sugar</li>
+        <li>Mix until sugar is dissolved</li>
+        <li>Add bread flour, salt, and vanilla extract</li>
+        <li>Wait 1 hour for autolyse</li>
+      </ol>
+      <div class="notes-after">Then continue with the classic recipe from there.</div>
+    </li>
+  </ul>`,
+  cheddar:`<ul class="notes-list">
+    <li class="notes-item">Bigger chunks of cheese taste better but make it harder to shape — it's a tradeoff. Lamination technique works well for incorporating.</li>
+    <li class="notes-item">The ½ jalapeño is for cross sections to lay on top of the loaf. Can bake directly on top.</li>
+  </ul>`,
+};
 
 // ── Equipment ────────────────────────────────────────────
 function getEquipment(r){
@@ -474,6 +510,14 @@ function renderIngredients(){
 }
 
 function renderSteps(){
+  const notes = RECIPE_NOTES[recipe];
+  const progWrap = document.querySelector('.prog-wrap');
+  if(notes){
+    progWrap.style.display = 'none';
+    document.getElementById('tl').innerHTML = notes;
+    return;
+  }
+  progWrap.style.display = '';
   document.getElementById('tl').innerHTML = getPhases(recipe).map(ph=>`
     <div class="phase">
       <span class="phase-stamp">${ph.phase}</span>
@@ -501,6 +545,7 @@ function toggleStep(id){ doneState[id]=!doneState[id]; renderSteps(); }
 function resetSteps(){ doneState={}; renderSteps(); }
 
 function updProg(){
+  if(RECIPE_NOTES[recipe]) return;
   const ids = getPhases(recipe).flatMap(ph=>ph.steps.map(s=>s.id));
   const n = ids.filter(id=>doneState[id]).length, t = ids.length;
   document.getElementById('pf').style.width = Math.round(n/t*100)+'%';
